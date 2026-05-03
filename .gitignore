@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Model artifacts (large, auto-generated on first run)
+models/
+
+# Data files (not committed — too large / potentially sensitive)
+data/
+
+# Exports
+exports/
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Word temp files
+~$*.docx
+~$*.xlsx
+
+# Claude Code local settings
+.claude/

@@ -1,0 +1,114 @@
+# ChurnGuard Analytics - Data Source Schema
+# Edit this file to add new sources or remap columns without touching agent code.
+# Phase 2: add a new source block, update feature_engineering.extra_sources list.
+
+data_dir: "data"   # relative to project root; override with DATA_DIR env var
+
+data_sources:
+
+  accounts:
+    path: "account_lifecycle_events.csv"
+    type: csv
+    primary_key: account_id
+    columns:
+      account_id: account_id
+      account_uuid: account_uuid
+      org_id: org_id
+      created_timestamp: created_timestamp
+      last_activity_timestamp: last_activity_timestamp
+      account_status: account_status
+      status_change_date: status_change_date
+      subscription_tier: subscription_tier
+      mrr: mrr
+      billing_cycle: billing_cycle
+      payment_method: payment_method
+      auto_renew_enabled: auto_renew_enabled
+      seats_purchased: seats_purchased
+      seats_active: seats_active
+      contract_end_date: contract_end_date
+      account_health_score: account_health_score
+      risk_flag: risk_flag
+      region: region
+      account_manager_id: account_manager_id
+      integration_count: integration_count
+      api_calls_enabled: api_calls_enabled
+      sso_enabled: sso_enabled
+      white_label_enabled: white_label_enabled
+      data_residency_region: data_residency_region
+      provisioning_method: provisioning_method
+      internal_notes_count: internal_notes_count
+
+  users:
+    path: "user_engagement_metrics.csv"
+    type: csv
+    primary_key: user_id
+    join_key: account_id      # how to join back to accounts
+    columns:
+      user_id: user_id
+      account_id: account_id
+      account_uuid: account_uuid
+      user_role: user_role
+      user_status: user_status
+      user_created_date: user_created_date
+      last_login_date: last_login_date
+      login_count_30d: login_count_30d
+      login_count_90d: login_count_90d
+      feature_usage_score: feature_usage_score
+      sessions_count_30d: sessions_count_30d
+      avg_session_duration_minutes: avg_session_duration_minutes
+      reports_generated_30d: reports_generated_30d
+      dashboards_created: dashboards_created
+      dashboards_shared: dashboards_shared
+      exports_count_30d: exports_count_30d
+      api_key_active: api_key_active
+      mobile_app_user: mobile_app_user
+      onboarding_completed: onboarding_completed
+      certification_earned: certification_earned
+      beta_features_enabled: beta_features_enabled
+      profile_completeness_pct: profile_completeness_pct
+
+  support:
+    path: "support_interaction_history.csv"
+    type: csv
+    primary_key: ticket_id
+    join_key: account_id
+    columns:
+      ticket_id: ticket_id
+      account_id: account_id
+      account_uuid: account_uuid
+      org_id: org_id
+      user_id: user_id
+      created_date: created_date
+      resolved_date: resolved_date
+      ticket_category: ticket_category
+      ticket_priority: ticket_priority
+      ticket_sentiment: ticket_sentiment
+      resolution_time_hours: resolution_time_hours
+      satisfaction_rating: satisfaction_rating
+      csat_score: csat_score
+      escalated: escalated
+      reopened_count: reopened_count
+      cancellation_requested: cancellation_requested
+      cancellation_reason: cancellation_reason
+      retention_offer_made: retention_offer_made
+      retention_offer_accepted: retention_offer_accepted
+      account_pause_requested: account_pause_requested
+      downgrade_requested: downgrade_requested
+      competitor_mentioned: competitor_mentioned
+      agent_id: agent_id
+      channel: channel
+      interaction_count: interaction_count
+      sla_breach: sla_breach
+      kb_articles_referenced: kb_articles_referenced
+
+# What the model predicts
+target:
+  source: accounts
+  column: account_status
+  positive_value: churned
+  # Phase 2: change positive_value or add extra_positive_values to redefine churn
+  extra_positive_values: []
+
+# Reference date for time-based feature calculations
+# Set to a fixed ISO date string for reproducibility, or "auto" for today
+reference_date: "2025-01-01"

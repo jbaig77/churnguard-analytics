@@ -1,0 +1,44 @@
+# ChurnGuard Analytics - Model Configuration
+# All thresholds and hyperparameters live here; no hardcoded values in agent code.
+
+model:
+  type: xgboost
+
+  # Risk bucketing thresholds
+  high_risk_threshold: 0.70
+  medium_risk_threshold: 0.20
+
+  # Training
+  cross_validation_folds: 5
+  random_seed: 42
+  test_size: 0.2
+
+  # XGBoost hyperparameters
+  params:
+    n_estimators: 300
+    max_depth: 6
+    learning_rate: 0.05
+    subsample: 0.8
+    colsample_bytree: 0.8
+    min_child_weight: 3
+    gamma: 0.1
+    reg_alpha: 0.1
+    reg_lambda: 1.0
+    eval_metric: logloss
+
+  # Features to drop before training (e.g. to remove leaky synthetic features)
+  feature_exclusions: []
+
+  # Cached artifacts (relative to project root)
+  cache:
+    enabled: true
+    model_path: "models/churn_model.joblib"
+    features_path: "models/features.parquet"
+    predictions_path: "models/predictions.parquet"
+    shap_path: "models/shap_values.npy"
+    meta_path: "models/meta.yaml"
+
+# Dashboard display settings
+dashboard:
+  top_n_accounts: 100
+  top_n_features: 10
